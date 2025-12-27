@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Un regalito</title>
+
+<style>
+/* ===== RESET ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* ===== COLORES PASTEL ===== */
+:root {
+  --rosa: #f7c6d0;
+  --rosa-glow: #ff9eb5;
+  --lila: #d9c8f0;
+  --celeste: #cce7f0;
+  --beige: #fff6e5;
+  --texto: #4a4a4a;
+}
+
+/* ===== INTRO ===== */
+#intro {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, var(--rosa), var(--lila));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  z-index: 10;
+  overflow: hidden;
+  cursor: pointer;
+  transition: opacity 1s ease;
+}
+
+#intro.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#intro h1 {
+  font-size: 3.2rem;
+  color: white;
+  animation: heartbeat 2.5s infinite;
+  text-shadow:
+    0 0 10px rgba(255,255,255,0.6),
+    0 0 30px rgba(255,158,181,1);
+}
+
+#intro p {
+  margin-top: 18px;
+  color: white;
+  opacity: 0.9;
+  animation: blink 2s infinite;
+}
+
+/* ===== MENÚ ===== */
+header {
+  position: sticky;
+  top: 0;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(12px);
+  padding: 15px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  z-index: 5;
+  box-shadow: 0 0 25px rgba(255,158,181,0.8);
+  animation: glowPulse 3s infinite alternate;
+}
+
+header button {
+  background: var(--rosa);
+  border: none;
+  padding: 10px 18px;
+  border-radius: 20px;
+  cursor: pointer;
+  color: var(--texto);
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 15px rgba(255,158,181,0.9);
+}
+
+header button:hover {
+  background: var(--rosa-glow);
+  color: white;
+  transform: translateY(-3px) scale(1.07);
+  box-shadow: 0 0 30px rgba(255,158,181,1);
+}
+
+/* ===== CONTENIDO ===== */
+main {
+  background: var(--beige);
+  padding: 40px 20px;
+}
+
+/* ===== SECCIONES ===== */
+.section {
+  max-width: 900px;
+  margin: auto;
+  margin-bottom: 80px;
+}
+
+.section h2 {
+  margin-bottom: 25px;
+  text-align: center;
+  color: var(--texto);
+}
+
+
+
+/* ===== WRAPPER POST ===== */
+.post-wrapper {
+  position: relative;
+  overflow: visible; /* CLAVE */
+}
+
+/* ===== POSTS ===== */
+.post {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 40px;
+  box-shadow:
+    0 0 25px rgba(255,158,181,0.7),
+    0 15px 30px rgba(0,0,0,0.1);
+  transition: all 0.4s ease;
+  opacity: 0;
+  transform: translateY(30px);
+  position: relative;
+  z-index: 2;
+}
+
+.post.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.post:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow:
+    0 0 40px rgba(255,158,181,1),
+    0 20px 35px rgba(0,0,0,0.2);
+}
+
+.post img,
+.post video {
+  width: 100%;
+  border-radius: 15px;
+}
+
+/* ===== EMOJIS ===== */
+.particle,
+.side-particle {
+  position: absolute;
+  font-size: 20px;
+  pointer-events: none;
+  opacity: 0.85;
+  animation: floatUp linear infinite;
+}
+
+.side-particle {
+  z-index: 1;
+}
+
+/* ===== ANIMACIONES ===== */
+@keyframes floatUp {
+  from {
+    transform: translateY(110vh) scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(-120vh) scale(1.2);
+    opacity: 1;
+  }
+}
+
+@keyframes glowPulse {
+  from { box-shadow: 0 0 15px rgba(255,158,181,0.6); }
+  to { box-shadow: 0 0 35px rgba(255,158,181,1); }
+}
+
+@keyframes blink {
+  0%,100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+@keyframes heartbeat {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+.side-decor {
+  position: fixed;
+  top: 0;
+  width: 120px;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.side-decor.left { left: 0; }
+.side-decor.right { right: 0; }
+
+.side-decor .side-particle {
+  position: absolute;
+  font-size: 20px;
+  opacity: 0.7;
+  animation: floatUp linear infinite;
+}
+</style>
+</head>
+
+<audio id="bg-music">
+  <source src="The Rare Occasions - Notion - Dol drums.mp3" type="audio/mpeg">
+</audio>
+
+<body>
+
+<!-- INTRO -->
+<div id="intro">
+  <div>
+    <h1>Feliz Cumple 🎂</h1>
+    <p>tocá o deslizá para entrar ✨</p>
+  </div>
+</div>
+
+<!-- MENÚ -->
+<header>
+  <button onclick="scrollToSection('old')">Old Stuff!!!</button>
+  <button onclick="scrollToSection('year')">Este Año!!!</button>
+  <button onclick="scrollToSection('extra')">Extras!!!</button>
+  <button onclick="scrollToSection('pipu')">Pipulina!!!</button>
+</header>
+
+<!-- CONTENIDO -->
+<main>
+
+<section id="old" class="section">
+  <h2>Old Stuff!!!</h2>
+
+  <div class="post-wrapper">
+    <div class="post"><img src="20171126_104542.jpg"></div>
+  </div>
+<h2>Old Stuff!!!</h2>
+  <div class="post-wrapper">
+    <div class="post"><img src="20171225_122201.jpg" controls></video></div>
+  </div>
+</section>
+
+<section id="year" class="section">
+  <h2>Este Año!!!</h2>
+
+  <div class="post-wrapper">
+    <div class="post"><img src="egresado.jpeg"></div>
+  </div>
+</section>
+
+<section id="year" class="section">
+  <h2>Este Año!!!</h2>
+
+  <div class="post-wrapper">
+    <div class="post"><img src="system.jpeg"></div>
+  </div>
+</section>
+
+
+<section id="year" class="section">
+  <h2>Este Año!!!</h2>
+
+  <div class="post-wrapper">
+    <div class="post"><video src="video linkin.mp4" controls></video></div>
+  </div>
+</section>
+
+<section id="year" class="section">
+  <h2>Este Año!!!</h2>
+
+  <div class="post-wrapper">
+    <div class="post"><img src="miedo.jpeg"></div>
+  </div>
+</section>
+
+<section id="year" class="section">
+  <div class="side-decor left"></div>
+  <div class="side-decor right"></div>
+
+  
+  ...
+</section>
+
+
+<section id="pipu" class="section">
+  <h2>Pipulina!!!</h2>
+
+  <div class="post-wrapper">
+    <div class="post"><img src="pipu.jpeg"></div>
+  </div>
+</section>
+
+<section id="pipu" class="section">
+  <h2>Pipulina!!!</h2>
+
+  <div class="post-wrapper">
+    <div class="post"><img src="pipu2.jpeg"></div>
+  </div>
+</section>
+
+<section id="pipu" class="section">
+  <h2>Pipulina!!!</h2>
+
+  <div class="post-wrapper">
+    <div class="post"><img src="pipu3.jpeg"></div>
+  </div>
+</section>
+
+<section id="extra" class="section">
+  <h2>Extras!!!</h2>
+
+  <div class="post-wrapper">
+    <div class="post"><img src="mami spider.jpeg"></div>
+  </div>
+</section>
+
+<section id="extra" class="section">
+  <h2>Extras!!!</h2>
+
+  <div class="post-wrapper">
+    <div class="post"><img src="jaja.jpeg"></div>
+  </div>
+</section>
+
+<section id="extra" class="section">
+  <h2>Extras!!!</h2>
+
+  <div class="post-wrapper">
+    <div class="post"><img src="casamiento.jpeg"></div>
+  </div>
+</section>
+
+</main>
+
+<script>
+/* INTRO */
+const intro = document.getElementById("intro");
+const music = document.getElementById("bg-music");
+let musicPlayed = false;
+
+function enterSite() {
+  intro.classList.add("hidden");
+
+  if (!musicPlayed) {
+    music.play().catch(() => {});
+    musicPlayed = true;
+  }
+}
+
+intro.addEventListener("click", enterSite);
+window.addEventListener("scroll", enterSite);
+
+/* SCROLL */
+function scrollToSection(id) {
+  document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+}
+
+/* APARECER POSTS */
+const posts = document.querySelectorAll(".post");
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => e.isIntersecting && e.target.classList.add("show"));
+}, { threshold: 0.2 });
+posts.forEach(p => observer.observe(p));
+
+/* EMOJIS INTRO */
+const emojis = ["💖","✨","🎈","🌸"];
+setInterval(() => {
+  const p = document.createElement("div");
+  p.className = "particle";
+  p.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+  p.style.left = Math.random() * 100 + "vw";
+  p.style.animationDuration = 6 + Math.random() * 4 + "s";
+  intro.appendChild(p);
+  setTimeout(() => p.remove(), 10000);
+}, 350);
+
+/* EMOJIS LATERALES */
+const wrappers = document.querySelectorAll(".post-wrapper");
+
+function spawnSideEmojis(wrapper) {
+  for (let i = 0; i < 2; i++) {
+    const e = document.createElement("div");
+    e.className = "side-particle";
+    e.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+    e.style.animationDuration = 6 + Math.random() * 4 + "s";
+    e.style[Math.random() > 0.5 ? "left" : "right"] = "-40px";
+    wrapper.appendChild(e);
+    setTimeout(() => e.remove(), 10000);
+  }
+}
+
+const sideObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => e.isIntersecting && spawnSideEmojis(e.target));
+}, { threshold: 0.3 });
+
+wrappers.forEach(w => sideObserver.observe(w));
+
+const sideContainers = document.querySelectorAll(".side-decor");
+const sideEmojis = ["✨","🌸","💖","🎈"];
+
+setInterval(() => {
+  sideContainers.forEach(container => {
+    const e = document.createElement("div");
+    e.className = "side-particle";
+    e.innerText = sideEmojis[Math.floor(Math.random() * sideEmojis.length)];
+    e.style.left = Math.random() * 80 + "px";
+    e.style.animationDuration = 6 + Math.random() * 5 + "s";
+    container.appendChild(e);
+    setTimeout(() => e.remove(), 11000);
+  });
+}, 900);
+</script>
+
+</body>
+</html>
